@@ -1,0 +1,17 @@
+# ===== NODE MODULES =====
+node_modules/
+*/node_modules/
+
+# ===== ARCHIVOS SENSIBLES =====
+.env
+backend/.env
+
+# ===== ANGULAR =====
+frontend/dist/
+frontend/.angular/
+
+# ===== LOGS =====
+*.log
+
+# ===== SISTEMA =====
+.DS_Store

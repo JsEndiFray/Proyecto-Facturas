@@ -1,0 +1,6 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/JsEndiFray/back-billing.git
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/JsEndiFray/front-billing.git
