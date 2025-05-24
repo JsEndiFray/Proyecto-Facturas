@@ -4,14 +4,26 @@ node_modules/
 
 # ===== ARCHIVOS SENSIBLES =====
 .env
-backend/.env
+**/.env
+docker-compose.yml
 
 # ===== ANGULAR =====
 frontend/dist/
 frontend/.angular/
+frontend/.angular/cache/
+frontend/.angular/config.json
+frontend/.angular/local/
 
 # ===== LOGS =====
 *.log
+logs/
+npm-debug.log*
 
 # ===== SISTEMA =====
 .DS_Store
+Thumbs.db
+
+# ===== IDEs =====
+.idea/
+.vscode/
+*.code-workspace
