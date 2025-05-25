@@ -23,6 +23,8 @@ services: # "Servicios" = contenedores que vas a crear
       - ./backend/routes:/app/routes  # "Tus rutas → rutas del contenedor"
       - ./backend/index.js:/app/index.js  # "Tu index.js → index.js del contenedor"
 
+
+
   # ===== CONTENEDOR DEL FRONTEND =====
   frontend: # Nombre del servicio
     build: ./frontend       # "Construye usando la carpeta ./frontend"
@@ -31,6 +33,9 @@ services: # "Servicios" = contenedores que vas a crear
       - "4200:4200"         # "Puerto 4200 de tu PC → Puerto 4200 del contenedor"
     volumes: # Hot reload para Angular
       - ./frontend/src:/app/src       # "Tu código Angular → código en el contenedor"
+
+
+
 
   # ===== CONTENEDOR DE MYSQL =====
   mysql: # Nombre del servicio
@@ -50,6 +55,26 @@ services: # "Servicios" = contenedores que vas a crear
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
+
+
+
+  # ===== PHPMYADMIN =====
+  phpmyadmin: # ← Nombre del servicio (puedes llamarlo como quieras)
+    image: phpmyadmin/phpmyadmin # ← Imagen oficial de phpMyAdmin desde Docker Hub
+    container_name: facturas-phpmyadmin  # ← Nombre que verás en "docker ps"
+    ports:
+      - "8080:80"                # ← Puerto 8080 de tu Mac → Puerto 80 del contenedor
+      #   (phpMyAdmin funciona en puerto 80 internamente)
+    environment: # ← Variables de configuración para phpMyAdmin
+      PMA_HOST: mysql            # ← "Conecta al servicio llamado 'mysql'"
+      PMA_PORT: 3306             # ← "MySQL está en puerto 3306"
+      PMA_USER: ${MYSQL_USER}    # ← Usuario automático (admin desde tu .env)
+      PMA_PASSWORD: ${MYSQL_PASSWORD}  # ← Password automático (1984endifR€% desde tu .env)
+    depends_on: # ← "No inicies hasta que esté listo"
+      - mysql                    # ← "Espera a que MySQL esté funcionando"
+    restart: unless-stopped      # ← "Si se cae, reinicia automáticamente"
+    #   (excepto si lo paras manualmente)
+
 
 # ===== ALMACENAMIENTO PERSISTENTE =====
 volumes: # Define volúmenes (espacios de almacenamiento)
