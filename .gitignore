@@ -5,7 +5,6 @@ node_modules/
 # ===== ARCHIVOS SENSIBLES =====
 .env
 **/.env
-docker-compose.yml
 db_jose_backup.sql
 README1.md
 

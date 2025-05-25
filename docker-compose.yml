@@ -1,0 +1,56 @@
+services: # "Servicios" = contenedores que vas a crear
+
+  # ===== CONTENEDOR DEL BACKEND =====
+  backend: # Nombre del servicio (puede ser cualquier nombre)
+    build: ./backend        # "Construye usando la carpeta ./backend" (busca Dockerfile ahí)
+    container_name: facturas-backend  # Nombre que verás cuando hagas "docker ps"
+    depends_on: # "Espera a que este servicio esté listo antes de iniciar"
+      mysql:
+        condition: service_healthy  # ← Espera hasta que MySQL pase el health check
+    env_file: # Cargar variables desde archivo .env
+      - ./backend/.env       # Ruta al archivo .env del backend
+    ports:
+      - "3600:3600"         # "Puerto 3600 de tu PC → Puerto 3600 del contenedor"
+    environment: # Variables de entorno (como el .env)
+      - NODE_ENV=development          # Le dice al contenedor que está en desarrollo
+      - DB_HOST=mysql                 # "Conecta a la base de datos llamada 'mysql'"
+      - DB_USER=${DB_USER}            # Usuario de la base de datos
+      - DB_PASSWORD=${DB_PASSWORD}    # Password de la base de datos
+      - DB_DATABASE=${DB_DATABASE}    # Nombre de tu base de datos
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET} # ← Variable para tokens de renovación JWT
+    volumes: # "Carpetas compartidas" (hot reload)
+      - ./backend/src:/app/src        # "Tu carpeta src → carpeta src del contenedor"
+      - ./backend/routes:/app/routes  # "Tus rutas → rutas del contenedor"
+      - ./backend/index.js:/app/index.js  # "Tu index.js → index.js del contenedor"
+
+  # ===== CONTENEDOR DEL FRONTEND =====
+  frontend: # Nombre del servicio
+    build: ./frontend       # "Construye usando la carpeta ./frontend"
+    container_name: facturas-frontend  # Nombre visible
+    ports:
+      - "4200:4200"         # "Puerto 4200 de tu PC → Puerto 4200 del contenedor"
+    volumes: # Hot reload para Angular
+      - ./frontend/src:/app/src       # "Tu código Angular → código en el contenedor"
+
+  # ===== CONTENEDOR DE MYSQL =====
+  mysql: # Nombre del servicio
+    image: mysql:8.0        # "Usa la imagen oficial de MySQL versión 8.0"
+    container_name: facturas-mysql    # Nombre visible
+    ports:
+      - "3306:3306"         # "Puerto 3306 de tu PC → Puerto 3306 del contenedor"
+    environment: # Configuración de MySQL
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}      # Password del usuario root
+      MYSQL_DATABASE: ${MYSQL_DATABASE}        # Crear base de datos "db_jose" automáticamente
+      MYSQL_USER: ${MYSQL_USER}               # Crear usuario "admin"
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}    # Password del usuario "admin"
+    volumes: # Almacenamiento persistente
+      - mysql_data:/var/lib/mysql     # "Guardar datos en volumen mysql_data"
+      - ./db_jose_backup.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck: # Verificar que MySQL esté listo
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+# ===== ALMACENAMIENTO PERSISTENTE =====
+volumes: # Define volúmenes (espacios de almacenamiento)
+  mysql_data:               # Nombre del volumen (para que los datos de MySQL no se pierdan)
