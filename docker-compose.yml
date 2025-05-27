@@ -57,10 +57,9 @@ services: # "Servicios" = contenedores que vas a crear
       retries: 10
 
 
-
   # ===== PHPMYADMIN =====
   phpmyadmin: # ← Nombre del servicio (puedes llamarlo como quieras)
-    image: phpmyadmin/phpmyadmin # ← Imagen oficial de phpMyAdmin desde Docker Hub
+    image: phpmyadmin/phpmyadmin  # ← Imagen oficial de phpMyAdmin desde Docker Hub
     container_name: facturas-phpmyadmin  # ← Nombre que verás en "docker ps"
     ports:
       - "8080:80"                # ← Puerto 8080 de tu Mac → Puerto 80 del contenedor
