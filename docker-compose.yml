@@ -22,6 +22,7 @@ services: # "Servicios" = contenedores que vas a crear
       - ./backend/src:/app/src        # "Tu carpeta src → carpeta src del contenedor"
       - ./backend/routes:/app/routes  # "Tus rutas → rutas del contenedor"
       - ./backend/index.js:/app/index.js  # "Tu index.js → index.js del contenedor"
+      - ./backend/uploads:/app/uploads  #"carpeta para guardar la subidad de archivos uploads"
 
 
 
