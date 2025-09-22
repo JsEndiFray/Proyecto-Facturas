@@ -5,8 +5,13 @@ node_modules/
 # ===== ARCHIVOS SENSIBLES =====
 .env
 **/.env
-db_jose_backup.sql
 README1.md
+
+# ===== BASES DE DATOS =====
+*.sql
+db_*.sql
+db_facturas_backup.sql
+uploads/
 
 # ===== ANGULAR =====
 frontend/dist/

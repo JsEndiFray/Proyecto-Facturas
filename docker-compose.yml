@@ -8,7 +8,7 @@ services: # "Servicios" = contenedores que vas a crear
       mysql:
         condition: service_healthy  # ← Espera hasta que MySQL pase el health check
     env_file: # Cargar variables desde archivo .env
-      - ./backend/.env       # Ruta al archivo .env del backend
+      - ./.env       # Ruta al archivo .env del backend
     ports:
       - "3600:3600"         # "Puerto 3600 de tu PC → Puerto 3600 del contenedor"
     environment: # Variables de entorno (como el .env)
@@ -51,7 +51,7 @@ services: # "Servicios" = contenedores que vas a crear
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}    # Password del usuario "admin"
     volumes: # Almacenamiento persistente
       - mysql_data:/var/lib/mysql     # "Guardar datos en volumen mysql_data"
-      - ./db_jose_backup.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db_facturas_backup.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck: # Verificar que MySQL esté listo
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 20s
